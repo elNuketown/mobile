@@ -1,0 +1,7 @@
+export declare const MOZ_CENTRAL_CARGO_TOML = "https://hg.mozilla.org/mozilla-central/raw-file/tip/testing/geckodriver/Cargo.toml";
+export declare const BASE_CDN_URL: string;
+export declare const GECKODRIVER_DOWNLOAD_PATH: string;
+export declare const DEFAULT_HOSTNAME = "0.0.0.0";
+export declare const BINARY_FILE: string;
+export declare const log: import("loglevel").Logger;
+//# sourceMappingURL=constants.d.ts.map
