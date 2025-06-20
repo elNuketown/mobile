@@ -1,4 +1,4 @@
-# 🤖 Appium + WebdriverIO (Android)
+# Appium + WebdriverIO (Android)
 
 Automação mobile do **Swag Labs** em JavaScript, Mocha, Appium e relatórios Allure.
 
@@ -22,7 +22,7 @@ Automação mobile do **Swag Labs** em JavaScript, Mocha, Appium e relatórios A
 
 ---
 
-## 🛠️ Pré-requisitos
+## ⚙️ Pré-requisitos
 
 | Item | Versão |
 |------|--------|
@@ -35,7 +35,7 @@ Adicione **`%ANDROID_HOME%\platform-tools`** ao `PATH`.
 
 ---
 
-## 🚀 Como executar
+## ✅Como executar
 
 1. **Instalar dependências**
 
@@ -53,7 +53,7 @@ npx appium --allow-cors
 
 npm test
 
-## 🚀 Relatorios
+## Relatorios
 
 1. **Geração**
 
