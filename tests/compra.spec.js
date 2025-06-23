@@ -33,12 +33,12 @@ describe('Login Swag Labs', () => {
     const botaoAddCarrinho = '//android.widget.TextView[@text="ADD TO CART"]';
 
     let tentativas = 0;
-     while (!(await driver.driver.$(botaoAddCarrinho).isDisplayed()) && tentativas < 6) {
+     while (!(await driver.$(botaoAddCarrinho).isDisplayed()) && tentativas < 6) {
       await swipe();
       tentativas++;
     }
 
-    if (!(await driver.driver.$(botaoAddCarrinho).isDisplayed())) {
+    if (!(await driver.$(botaoAddCarrinho).isDisplayed())) {
       throw new Error('Não encontrado');
     }
 
