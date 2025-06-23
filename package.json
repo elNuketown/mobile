@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "appium": "appium",
-    "test": "wdio run wdio.conf.cjs",
+    "test:ci": "mocha \"tests/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true",
     "report:generate": "allure generate allure-results --clean -o allure-report",
     "report:open": "allure open allure-report",
     "ci:test": "wdio run wdio.conf.js --logLevel warn"
@@ -19,6 +19,9 @@
     "appium": "^2.19.0",
     "appium-uiautomator2-driver": "^2.45.1",
     "chai": "^4.5.0",
+    "mocha": "^11.7.0",
+    "mochawesome": "^7.1.3",
+    "playwright": "^1.53.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

@@ -1,54 +1,53 @@
-name: Testes pós commit
+name: Mobile-like E2E (Mocha + Playwright)
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main ]        # rode em cada commit no main
+  pull_request:               # e também em PRs
 
 jobs:
-  e2e-android:
-    runs-on: macos-14
+  tests:
+    runs-on: ubuntu-latest
 
     steps:
+    # 1) Código do repositório
     - uses: actions/checkout@v4
 
+    # 2) Node + cache automático de ~/.npm
     - uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
+        cache: 'npm'
 
-    - name: Instalar dependências
+    # 3) Dependências (inclui playwright e mocha)
+    - name: Install deps
       run: npm ci
 
-    - name: Iniciar emulador e rodar testes
-      uses: ReactiveCircus/android-emulator-runner@v2
-      with:
-        api-level: 30                  # mais leve que 34
-        arch: x86_64                   # OK no macOS
-        profile: Nexus 5               # tela e RAM menores
-        target: google_apis
-        disable-animations: true
-        emulator-options: "-no-window"
-        emulator-boot-timeout: 900     # ⏲️ 15 min de margem
-        script: |
-          echo "⌛ aguardando boot..."
-          adb wait-for-device
-          until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
-            sleep 5
-          done
-          echo "✅ emulador pronto!"
-          npm run ci:test
+    # 4) Instala navegadores e libs de SO necessárias ao Playwright
+    - uses: microsoft/playwright-github-action@v1
+      # Essa action executa internamente:
+      #   npx playwright install --with-deps
+      # e resolve permissões/CORS/callbacks
 
-    # 5 ▸ Relatório (opcional)
-    - name: Gerar relatório HTML
-      if: always()                   # ainda gera mesmo se teste falhar
+    # 5) Executa o Mocha
+    #    --reporter mochawesome gera reports/mochawesome.html
+    - name: Run Mocha tests with Playwright
       run: |
-        mkdir -p reports
-        cp -r ./reports-html/* reports/ || true
+        npx mocha "tests/**/*.spec.js" \
+          --reporter mochawesome \
+          --reporter-options reportDir=reports,reportFilename=index,html=true
 
-    - name: Upload relatórios
+    # 6) Publica o relatório como artefato
+    - name: Upload mochawesome report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: e2e-report
-        path: reports
+        name: mochawesome-report
+        path: reports/           # conterá index.html + assets
+
+    # 7) Resumo curto na UI do job
+    - name: Summary
+      if: always()
+      run: |
+        echo "### 🧪 Mocha + Playwright finalizado" >> $GITHUB_STEP_SUMMARY
+        echo "- Total de testes: verifique o artefato **mochawesome-report**" >> $GITHUB_STEP_SUMMARY
