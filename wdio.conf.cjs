@@ -1,53 +1,31 @@
-const path = require('path');
-const allure = require('@wdio/allure-reporter').default;
-
 exports.config = {
-  hostname: 'localhost',
-  port: 4723,
-  path: '/',
   runner: 'local',
-
+  path: '/wd/hub',
   specs: ['./tests/**/*.spec.js'],
   maxInstances: 1,
 
-  capabilities: [
-  {
-    platformName: 'Android',
-    'appium:deviceName': 'emulator-5554',
-    'appium:automationName': 'UiAutomator2',
-    'appium:app': 'apps/SwagLabs.apk',
-    'appium:autoGrantPermissions': true,
-    'appium:appWaitActivity': '*',
-  }
-],
+  user: process.env.BROWSERSTACK_USERNAME,
+  key: process.env.BROWSERSTACK_ACCESS_KEY,
+
+  capabilities: [{
+    'platformName': 'Android',
+    'appium:deviceName': 'Google Pixel 7',
+    'appium:platformVersion': '13.0',
+    'appium:app': 'bs://b7ee0761bb5fc977050358540241ea89c5147553',
+    'appium:automationName': 'UiAutomator2'
+  }],
 
   logLevel: 'info',
-  bail: 0,
-  baseUrl: 'http://localhost',
   waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 1,
-
   framework: 'mocha',
-  mochaOpts: { ui: 'bdd', timeout: 60000 },
-  services: ['appium'],
-  args: {
-      basePath: '/wd/hub',
-      port: 4723
-    },
-  reporters: [
-  'spec',
-  ['allure', {
-    outputDir: 'allure-results',
-    disableWebdriverStepsReporting: false,
-    disableWebdriverScreenshotsReporting: true,
-  }]
-],
-
-  afterTest: async function (test, context, { error, passed }) {
-    if (!passed) {
-      const screenshot = await browser.takeScreenshot();
-      allure.addAttachment('Screenshot on Failure', Buffer.from(screenshot, 'base64'), 'image/png');
-    }
-  }
+  mochaOpts: {
+    timeout: 60000
+  },
+  reporters: ['spec', ['mochawesome', {
+    outputDir: './reports',
+    reportFilename: 'index',
+    quiet: true,
+    html: true,
+    json: false,
+  }]],
 };

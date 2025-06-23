@@ -1,42 +1,33 @@
-name: Mobile Appium Tests (Mocha)
+name: Mobile Tests
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  appium-tests:
+  test:
     runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
 
-      - name: Install dependencies
-        run: npm ci
+    - name: Install dependencies
+      run: npm install
 
-      - name: Install Appium
-        run: |
-          npm install -g appium
-          appium -v
+    - name: Run Tests
+      run: npx wdio run wdio.conf.js
 
-      - name: Start Appium server
-        run: |
-          nohup appium --base-path /wd/hub > appium.log 2>&1 &
-          sleep 5
-
-      - name: Run tests with Mocha + Appium
-        run: |
-          npx mocha "tests/**/*.js" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true
-
-      - name: Upload mochawesome report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mochawesome-report
-          path: reports/
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: mobile-test-report
+        path: reports/index.html

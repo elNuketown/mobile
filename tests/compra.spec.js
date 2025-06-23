@@ -12,15 +12,22 @@ describe('Login Swag Labs – compra de mochila', function () {
   // 1️⃣  Hook BEFORE: cria a sessão Appium
   before(async () => {
       driver = await remote({
-      path: '/wd/hub',
-      port: 4723,
-      capabilities: {
-        platformName: 'Android',
-          'appium:deviceName': 'emulator-5554',
-          'appium:app': process.cwd() + '/apps/seu-apk.apk',
-          'appium:automationName': 'UiAutomator2'
-        }
-      });
+  protocol: 'https',
+  hostname: 'hub.browserstack.com',
+  port: 443,
+  path: '/wd/hub',
+  capabilities: {
+    'platformName': 'Android',
+    'bstack:options': {
+      deviceName: 'Google Pixel 7',
+      osVersion: '13.0',
+      userName: process.env.BROWSERSTACK_USERNAME,
+      accessKey: process.env.BROWSERSTACK_ACCESS_KEY
+    },
+    'appium:app': 'bs://<ID-do-apk-subido>',
+    'appium:automationName': 'UiAutomator2'
+  }
+});
     });
 
   // 2️⃣  Hook AFTER: encerra a sessão
