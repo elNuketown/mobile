@@ -40,9 +40,8 @@ jobs:
       run: npm run test:mobile
 
     # 6) Publica o relatório HTML mochawesome como artefato
-    - name: Upload Mochawesome report
-      if: always()                     # Faz upload mesmo se falhar
+    - name: Upload Mochawesome Report
       uses: actions/upload-artifact@v4
       with:
         name: mochawesome-report
-        path: reports/
+        path: reports/mochawesome/

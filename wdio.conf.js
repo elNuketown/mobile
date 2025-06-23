@@ -14,9 +14,17 @@ exports.config = {
   framework: 'mocha',
   reporters: [
   ['mochawesome', {
-    outputDir: './reports',
+    outputDir: './reports/mochawesome',
     outputFileFormat: function(opts) {
       return `results-${opts.cid}.json`
+    },
+    mochawesome_opts: {
+      reportDir: './reports/mochawesome',
+      reportFilename: 'report',
+      quiet: true,
+      overwrite: false,
+      html: true,
+      json: true
     }
   }]
 ],
