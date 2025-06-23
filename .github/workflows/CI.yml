@@ -34,7 +34,7 @@ jobs:
 
     # 6 – Start Android emulator + ADB
     - name: Start Emulator (API 34)
-      uses: uses: ReactiveCircus/android-emulator-runner@v2
+      uses: ReactiveCircus/android-emulator-runner@v2
       with:
         api-level: 34
         arch: x86_64
