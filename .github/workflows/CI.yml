@@ -26,10 +26,14 @@ jobs:
         npm install
         npm ci
 
-# 5 – Iniciar Appium 2 em background
+    - name: Install Appium 2.x + driver
+      run: |
+        npm install -g appium@latest      # instala CLI 2.x globalmente
+        appium driver install uiautomator2
+
     - name: Start Appium Server
       run: |
-        appium --log-timestamp --base-path /wd/hub &
+        appium --log-timestamp --base-path /wd/hub --port 4723 &
         npx wait-on tcp:4723
 
     # 6 – Start Android emulator + ADB
