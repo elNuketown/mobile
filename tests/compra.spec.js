@@ -11,17 +11,17 @@ describe('Login Swag Labs – compra de mochila', function () {
 
   // 1️⃣  Hook BEFORE: cria a sessão Appium
   before(async () => {
-    driver = await remote({
+      driver = await remote({
       path: '/wd/hub',
       port: 4723,
       capabilities: {
         platformName: 'Android',
-        deviceName: 'emulator-5554',
-        app: process.cwd() + '/apps/seu-apk.apk',
-        automationName: 'UiAutomator2'
-      }
+          'appium:deviceName': 'emulator-5554',
+          'appium:app': process.cwd() + '/apps/seu-apk.apk',
+          'appium:automationName': 'UiAutomator2'
+        }
+      });
     });
-  });
 
   // 2️⃣  Hook AFTER: encerra a sessão
   after(async () => {

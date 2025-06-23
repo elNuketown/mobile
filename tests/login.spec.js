@@ -9,13 +9,13 @@ describe('Login Swag Labs', () => {
   // 1️⃣ Hook de setup (antes dos testes)
   before(async () => {
     driver = await remote({
-      path: '/wd/hub',
-      port: 4723,
-      capabilities: {
-        platformName: 'Android',
-        deviceName: 'emulator-5554',
-        app: process.cwd() + '/apps/seu-apk.apk',
-        automationName: 'UiAutomator2'
+    path: '/wd/hub',
+    port: 4723,
+    capabilities: {
+      platformName: 'Android',
+        'appium:deviceName': 'emulator-5554',
+        'appium:app': process.cwd() + '/apps/seu-apk.apk',
+        'appium:automationName': 'UiAutomator2'
       }
     });
   });
