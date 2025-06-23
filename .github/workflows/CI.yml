@@ -24,7 +24,8 @@ jobs:
       run: npm ci
 
     # 4) Instala navegadores e libs de SO necessárias ao Playwright
-    - uses: microsoft/playwright-github-action@v1
+    - name: Instala navegadores Playwright
+      run: npx playwright install --with-deps
       # Essa action executa internamente:
       #   npx playwright install --with-deps
       # e resolve permissões/CORS/callbacks
