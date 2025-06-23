@@ -1,68 +1,82 @@
-# Appium + WebdriverIO (Android)
+# Testes de Mobile JS + Mocha + Appium
 
-Automação mobile do **Swag Labs** em JavaScript, Mocha, Appium e relatórios Allure.
+Este projeto utiliza JavaScript + Mocha + Appium com Device farm Browserstack para realizar testes mobile Android
 
 ---
 
-## 📁 Estrutura
-
+## 📁 Estrutura do Projeto
 ```
+mobile/
+├── .github/
+│   └── workflows/
+│       └── CI.yml
 ├── apps/
-│ └── SwagLabs.apk
+│   └── node_modules/
 ├── tests/
-│ ├── login.js
-│ └── compra.js
+│   ├── compra.spec.js
+│   └── login.spec.js
 ├── utils/
-│ ├── swipe.js
-│ └── login.js
-├── wdio.conf.cjs
+│   ├── driver.js
+│   ├── login.js
+│   └── swipe.js
+├── .gitignore
+├── package-lock.json
 ├── package.json
-└── README.md
+├── README.md
+└── wdio.conf.js
 ```
 
 ---
 
-## ⚙️ Pré-requisitos
+## ⚙️ Requisitos
 
-| Item | Versão |
-|------|--------|
-| Node.js | 18 LTS ou superior |
-| Java JDK | 11+ |
-| Android Studio / SDK | com `platform-tools`, emulador ativo |
-| Appium 2 | Instalado localmente (`npm i -g appium`) |
+| Item                    | Versão/Requisito                                                       |
+|-------------------------|------------------------------------------------------------------------|
+| Node.js                 | 18 LTS ou superior                                                     |
+| Java JDK                | 11 ou superior (com `JAVA_HOME` configurado)                           |
+| Android Studio / SDK    | Com `platform-tools` e ao menos um emulador configurado                |
+| Appium                  | ^2.19.0 (Instalado globalmente: `npm i -g appium`)                     |
+| Appium UIA2 Driver      | ^2.45.1 (`appium-uiautomator2-driver`)                                 |
+| WebdriverIO CLI         | ^8.38.0 (`@wdio/cli`)                                                  |
+| Mocha                   | ^11.7.0 (`mocha`)                                                      |
+| Chai                    | ^4.5.0                                                                 |
+| Allure CLI              | ^2.34.0 (`allure-commandline`)                                         |
+| Mochawesome             | ^7.1.3 (e plugins de merge e geração de relatório)                     |
+| TypeScript (opcional)   | ^5.8.3                                                                 |
+| Emulador Android ativo  | Rodando via Android Studio ou `emulator -avd <nome>`                   |
 
 Adicione **`%ANDROID_HOME%\platform-tools`** ao `PATH`.
 
 ---
 
-## ✅Como executar
+## ✅ Como Executar os Testes
 
-1. **Instalar dependências**
+### 1. Instalação as dependências:
 
- npm install
+npm install
 
-2. **Iniciar o emulador (ex.: Pixel API 30)**
+### 2. Iniciar o emulador (ex.: Pixel API 30)
 
- emulator -avd Pixel_11
+emulator -avd Pixel_11
 
-3.  **Iniciar o Appium Server**
+### 3. Iniciar o Appium Server
 
 npx appium --allow-cors
 
-4.  **Executar tests**
+### 4. Execução de testes:
 
 npm test
 
-## Relatorios
+### 5. Geração de relatorios:
 
-1. **Geração**
+npm run report:generate
 
- npm run report:generate
+npm run report:open 
 
-2. **Vizualizar**
-
- npm run report:open 
+---
 
 ## 👨‍💻 Autor
 
 Vinicios Virissimo
+
+---
