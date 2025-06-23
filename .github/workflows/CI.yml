@@ -1,32 +1,48 @@
-name: Mobile Tests
+name: Mobile CI – Appium + BrowserStack
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  mobile-tests:
     runs-on: ubuntu-latest
+
+    # Segredos criados em Settings ▸ Secrets and variables ▸ Actions
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+    # 1) Obtém o código do repositório
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
+    # 2) Prepara o Node e habilita cache automático do npm
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: npm
 
-      - name: Instalar dependências
-        run: npm ci
+    # 3) Instala dependências declaradas no package.json
+    - name: Instalar dependências
+      run: npm ci
 
-      - name: Dar permissão de execução ao wdio
-        run: chmod +x ./node_modules/.bin/wdio
+    # 4) Garante permissão de execução ao binário do WebdriverIO CLI
+    - name: Ajustar permissão do wdio
+      run: chmod +x ./node_modules/.bin/wdio
 
-      - name: Executar testes mobile
-        run: npm run test:mobile
+    # 5) Executa os testes — script definido em "scripts.test:mobile"
+    - name: Executar testes mobile no BrowserStack
+      run: npm run test:mobile
 
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v4
-        with:
-        name: mobile-test-report
-        path: reports/index.html
+    # 6) Publica o relatório HTML mochawesome como artefato
+    - name: Upload Mochawesome report
+      if: always()                     # Faz upload mesmo se falhar
+      uses: actions/upload-artifact@v4
+      with:
+        name: mochawesome-report
+        path: reports/
