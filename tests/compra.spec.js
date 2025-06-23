@@ -9,7 +9,7 @@ describe('Login Swag Labs', () => {
   it('faz compra de uma mochila', async () => {
     
      before(async () => {
-    driver = await remote({
+      driver = await remote({
       path: '/wd/hub',
       port: 4723,
       capabilities: {
@@ -21,7 +21,11 @@ describe('Login Swag Labs', () => {
     });
   });
 
-    await login();
+  after(async () => {
+    if (driver) await driver.deleteSession();
+  });
+
+    await login(driver);
 
     const itemMochila = await driver.driver.$('(//android.view.ViewGroup[@content-desc="test-Item"])[1]/android.view.ViewGroup/android.widget.ImageView');
     await itemMochila.click();
@@ -83,9 +87,5 @@ describe('Login Swag Labs', () => {
     await TitulothankYouMsg.waitForDisplayed({ timeout: 5000 });
     const texto = await TitulothankYouMsg.getText();
     expect(texto).to.equal('THANK YOU FOR YOU ORDER');
-  });
-
-  after(async () => {
-    if (driver) await driver.deleteSession();
   });
 });

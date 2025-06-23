@@ -8,7 +8,7 @@ describe('Login Swag Labs', () => {
   it('faz login com usuário e senha válidos', async () => {
 
      before(async () => {
-    driver = await remote({
+      driver = await remote({
       path: '/wd/hub',
       port: 4723,
       capabilities: {
@@ -18,6 +18,10 @@ describe('Login Swag Labs', () => {
         automationName: 'UiAutomator2'
       }
     });
+
+    after(async () => {
+    if (driver) await driver.deleteSession();
+  });
   });
 
     await login(driver);
@@ -26,9 +30,5 @@ describe('Login Swag Labs', () => {
     await itemLoja.waitForDisplayed({ timeout: 5000 });
     const texto = await itemLoja.getText();
     expect(texto).to.equal('Sauce Labs Backpack');
-  });
-
-  after(async () => {
-    if (driver) await driver.deleteSession();
   });
 });
