@@ -1,15 +1,14 @@
 // tests/compra.spec.js
 const { expect } = require('chai');
-const { remote } = require('webdriverio');           // ← faltava o import
+const { remote } = require('webdriverio');
 const { swipe }  = require('../utils/swipe');
 const { login }  = require('../utils/login');
 
-let driver;                                          // precisa estar no escopo do arquivo
+let driver;
 
 describe('Login Swag Labs – compra de mochila', function () {
-  this.timeout(120_000);                             // aumenta o timeout global do describe
+  this.timeout(120_000); 
 
-  // 1️⃣  Hook BEFORE: cria a sessão Appium
   before(async () => {
       driver = await remote({
   protocol: 'https',

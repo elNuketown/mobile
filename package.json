@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "appium": "appium",
+    "test:mobile": "wdio run wdio.conf.js",
     "test:ci": "mocha \"tests/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true",
     "report:generate": "allure generate allure-results --clean -o allure-report",
     "report:open": "allure open allure-report",
