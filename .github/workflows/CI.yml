@@ -7,27 +7,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm install
+      - name: Instalar dependências
+        run: npm ci
 
-    - name: Run Tests
-      run: npm run test:mobile
+      - name: Dar permissão de execução ao wdio
+        run: chmod +x ./node_modules/.bin/wdio
 
-    - name: Upload HTML report
-      uses: actions/upload-artifact@v4
-      with:
+      - name: Executar testes mobile
+        run: npm run test:mobile
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
         name: mobile-test-report
         path: reports/index.html
