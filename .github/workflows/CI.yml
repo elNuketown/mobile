@@ -26,7 +26,7 @@ jobs:
         npm install
         npm ci
 
-    - name: Start Android emulator
+    - name: Start Emulator (API 34) and run tests
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
         api-level: 34
@@ -35,6 +35,7 @@ jobs:
         target: google_apis
         disable-animations: true
         emulator-options: "-no-window"
+        script: npm run ci:test
 
     - name: Run E2E tests
       run: npm run ci:test
