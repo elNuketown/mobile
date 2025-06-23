@@ -1,4 +1,4 @@
-name: Mobile CI – Appium + BrowserStack
+name: Testes pós commit
 
 on:
   push:

@@ -2,35 +2,15 @@ const { expect } = require('chai');
 const { remote } = require('webdriverio');
 const { swipe }  = require('../utils/swipe');
 const { login }  = require('../utils/login');
+const { createDriver } = require('../utils/driver');
 
 let driver;
 
 describe('Realizar uma compra com sucesso', function () {
   this.timeout(120_000); 
 
-  before(async () => {
-  driver = await remote({
-  protocol: 'https',
-  hostname: 'hub.browserstack.com',
-  port: 443,
-  path: '/wd/hub',
-  capabilities: {
-    'platformName': 'Android',
-    'bstack:options': {
-      deviceName: 'Google Pixel 7',
-      osVersion: '13.0',
-      userName: process.env.BROWSERSTACK_USERNAME,
-      accessKey: process.env.BROWSERSTACK_ACCESS_KEY
-    },
-    'appium:app': 'bs://b7ee0761bb5fc977050358540241ea89c5147553',
-    'appium:automationName': 'UiAutomator2'
-  }
-});
-    });
-
-  after(async () => {
-    if (driver) await driver.deleteSession();
-  });
+  before(async () => { driver = await createDriver(); });
+  after(async  () => { await driver?.deleteSession(); });
 
   it('Compra de mochila', async () => {
 
@@ -78,21 +58,5 @@ describe('Realizar uma compra com sucesso', function () {
     const thankYou = await driver.$('//android.widget.TextView[@text="THANK YOU FOR YOU ORDER"]');
     await thankYou.waitForDisplayed({ timeout: 5000 });
     expect(await thankYou.getText()).to.equal('THANK YOU FOR YOU ORDER');
-  });
-
-   afterEach(async function () {
-    const safeName = this.currentTest.title.replace(/\s+/g, '_');
-    const filePath = `./reports/mochawesome/screenshots/${safeName}.png`;
-
-    try {
-      await driver.saveScreenshot(filePath);
-      // attach no contexto
-      this.currentTest.context = {
-        title: 'Screenshot',
-        value: filePath
-      };
-    } catch (e) {
-      console.warn('Falha ao capturar screenshot', e);
-    }
   });
 });
