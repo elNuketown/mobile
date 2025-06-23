@@ -1,54 +1,42 @@
-name: Mobile-like E2E (Mocha + Playwright)
+name: Mobile Appium Tests (Mocha)
 
 on:
   push:
-    branches: [ main ]        # rode em cada commit no main
-  pull_request:               # e também em PRs
+    branches: [ main ]
 
 jobs:
-  tests:
+  appium-tests:
     runs-on: ubuntu-latest
 
     steps:
-    # 1) Código do repositório
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    # 2) Node + cache automático de ~/.npm
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    # 3) Dependências (inclui playwright e mocha)
-    - name: Install deps
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    # 4) Instala navegadores e libs de SO necessárias ao Playwright
-    - name: Instala navegadores Playwright
-      run: npx playwright install --with-deps
-      # Essa action executa internamente:
-      #   npx playwright install --with-deps
-      # e resolve permissões/CORS/callbacks
- 
-    # 5) Executa o Mocha
-    #    --reporter mochawesome gera reports/mochawesome.html
-    - name: Run Mocha tests with Playwright
-      run: |
-        npx mocha "tests/**/*.spec.js" \
-          --reporter mochawesome \
-          --reporter-options reportDir=reports,reportFilename=index,html=true
+      - name: Install Appium
+        run: |
+          npm install -g appium
+          appium -v
 
-    # 6) Publica o relatório como artefato
-    - name: Upload mochawesome report
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: mochawesome-report
-        path: reports/           # conterá index.html + assets
+      - name: Start Appium server
+        run: |
+          nohup appium --base-path /wd/hub > appium.log 2>&1 &
+          sleep 5
 
-    # 7) Resumo curto na UI do job
-    - name: Summary
-      if: always()
-      run: |
-        echo "### 🧪 Mocha + Playwright finalizado" >> $GITHUB_STEP_SUMMARY
-        echo "- Total de testes: verifique o artefato **mochawesome-report**" >> $GITHUB_STEP_SUMMARY
+      - name: Run tests with Mocha + Appium
+        run: |
+          npx mocha "tests/**/*.js" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true
+
+      - name: Upload mochawesome report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: reports/
