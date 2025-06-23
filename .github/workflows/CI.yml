@@ -26,11 +26,36 @@ jobs:
         npm install
         npm ci
 
-    - name: Executando testes
+# 5 – Iniciar Appium 2 em background
+    - name: Start Appium Server
       run: |
-        npx playwright test
+        appium --log-timestamp --base-path /wd/hub &
+        npx wait-on tcp:4723
 
-    - uses: actions/upload-artifact@v4
+    # 6 – Start Android emulator + ADB
+    - name: Start Emulator (API 34)
+      uses: ReactiveCircus/android-emulator-runner@v3
       with:
-        name: playwright-report
-        path: playwright-report
+        api-level: 34
+        arch: x86_64
+        profile: pixel_6
+        target: google_apis
+        disable-animations: true
+        emulator-options: "-no-window"
+
+    # 7 – Executar testes
+    - name: Run E2E tests
+      run: npm run ci:test
+
+    # 8 – Gerar relatório HTML (ex.: WDIO HTML Reporter)
+    - name: Gerar relatório HTML
+      run: |
+        mkdir -p reports
+        cp -r ./reports-html/* reports/
+
+    # 9 – Publicar artefatos
+    - name: Upload relatórios
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-report
+        path: reports

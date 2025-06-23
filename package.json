@@ -5,7 +5,8 @@
     "appium": "appium",
     "test": "wdio run wdio.conf.cjs",
     "report:generate": "allure generate allure-results --clean -o allure-report",
-    "report:open": "allure open allure-report"
+    "report:open": "allure open allure-report",
+    "ci:test": "wdio run wdio.conf.js --logLevel warn"
   },
   "devDependencies": {
     "@wdio/allure-reporter": "^8.38.0",
