@@ -29,7 +29,7 @@ jobs:
       # Essa action executa internamente:
       #   npx playwright install --with-deps
       # e resolve permissões/CORS/callbacks
-
+ 
     # 5) Executa o Mocha
     #    --reporter mochawesome gera reports/mochawesome.html
     - name: Run Mocha tests with Playwright
