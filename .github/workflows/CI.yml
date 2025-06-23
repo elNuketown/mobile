@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  mobile-tests:
+  test:
     runs-on: ubuntu-latest
 
     env:
