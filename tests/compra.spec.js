@@ -3,6 +3,8 @@ const allure = require('@wdio/allure-reporter').default;
 const { swipe } = require('../utils/swipe');
 const { login } = require('../utils/login');
 
+let driver;
+
 describe('Login Swag Labs', () => {
   it('faz compra de uma mochila', async () => {
     
@@ -17,10 +19,6 @@ describe('Login Swag Labs', () => {
         automationName: 'UiAutomator2'
       }
     });
-  });
-
-  after(async () => {
-    if (driver) await driver.deleteSession();
   });
 
     await login();
@@ -85,5 +83,9 @@ describe('Login Swag Labs', () => {
     await TitulothankYouMsg.waitForDisplayed({ timeout: 5000 });
     const texto = await TitulothankYouMsg.getText();
     expect(texto).to.equal('THANK YOU FOR YOU ORDER');
+  });
+
+  after(async () => {
+    if (driver) await driver.deleteSession();
   });
 });
