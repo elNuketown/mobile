@@ -26,17 +26,16 @@ jobs:
         npm install
         npm ci
 
-    - name: Install Appium 2.x + driver
+    - name: Install Appium 2.x + UiAutomator2 driver
       run: |
         npm install -g appium@latest
         appium driver install uiautomator2 || true
 
-    - name: Start Appium Server
+    - name: Start Appium server
       run: |
-        appium --log-timestamp --base-path /wd/hub --port 4723 &
-        npx wait-on tcp:4723
+        appium --log-timestamp --base-path /wd/hub --port 4723 &   # sobe em background
+        npx wait-on tcp:4723        
 
-    # 6 – Start Android emulator + ADB
     - name: Start Emulator (API 34)
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
@@ -47,17 +46,14 @@ jobs:
         disable-animations: true
         emulator-options: "-no-window"
 
-    # 7 – Executar testes
     - name: Run E2E tests
       run: npm run ci:test
 
-    # 8 – Gerar relatório HTML (ex.: WDIO HTML Reporter)
     - name: Gerar relatório HTML
       run: |
         mkdir -p reports
         cp -r ./reports-html/* reports/
 
-    # 9 – Publicar artefatos
     - name: Upload relatórios
       uses: actions/upload-artifact@v4
       with:
