@@ -39,9 +39,11 @@ jobs:
     - name: Executar testes mobile no BrowserStack
       run: npm run test:mobile
 
-    # 6) Publica o relatório HTML mochawesome como artefato
-    - name: Upload Mochawesome Report
+    - name: Gerar relatório HTML do Mochawesome
+      run: npm run postreport
+
+    - name: Upload do Relatório HTML
       uses: actions/upload-artifact@v4
       with:
-        name: mochawesome-report
+        name: mochawesome-html-report
         path: reports/mochawesome/

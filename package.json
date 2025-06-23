@@ -7,6 +7,9 @@
     "test:ci": "mocha \"tests/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=reports,reportFilename=index,html=true",
     "report:generate": "allure generate allure-results --clean -o allure-report",
     "report:open": "allure open allure-report",
+    "merge-report": "mochawesome-merge ./reports/mochawesome/*.json > ./reports/mochawesome/merged.json",
+    "generate-report": "marge ./reports/mochawesome/merged.json --reportDir ./reports/mochawesome --reportFilename report",
+    "postreport": "npm run merge-report && npm run generate-report",
     "ci:test": "wdio run wdio.conf.js --logLevel warn"
   },
   "devDependencies": {
@@ -22,6 +25,8 @@
     "chai": "^4.5.0",
     "mocha": "^11.7.0",
     "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^5.0.0",
+    "mochawesome-report-generator": "^6.2.0",
     "playwright": "^1.53.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
