@@ -31,6 +31,10 @@ exports.config = {
   framework: 'mocha',
   mochaOpts: { ui: 'bdd', timeout: 60000 },
   services: ['appium'],
+  args: {
+      basePath: '/wd/hub',
+      port: 4723
+    },
   reporters: [
   'spec',
   ['allure', {

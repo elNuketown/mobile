@@ -26,7 +26,8 @@ jobs:
         npm install
         npm ci
 
-    - name: Install Appium 2.x + UiAutomator2 driver
+    
+    - name: Install Appium 2.x + UiAutomator2
       run: |
         npm install -g appium@latest
         appium driver install uiautomator2 || true
@@ -34,7 +35,7 @@ jobs:
     - name: Start Appium server (detached)
       run: |
         nohup appium --log-timestamp --base-path /wd/hub --port 4723 > appium.log 2>&1 &
-        npx wait-on tcp:4723       
+        npx wait-on tcp:4723
 
     - name: Start Emulator (API 34)
       uses: ReactiveCircus/android-emulator-runner@v2
