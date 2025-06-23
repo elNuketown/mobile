@@ -23,7 +23,7 @@ describe('Login Swag Labs – compra de mochila', function () {
       userName: process.env.BROWSERSTACK_USERNAME,
       accessKey: process.env.BROWSERSTACK_ACCESS_KEY
     },
-    'appium:app': 'bs://<ID-do-apk-subido>',
+    'appium:app': 'bs://b7ee0761bb5fc977050358540241ea89c5147553',
     'appium:automationName': 'UiAutomator2'
   }
 });
