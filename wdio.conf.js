@@ -12,10 +12,13 @@ exports.config = {
   }],
   logLevel: 'info',
   framework: 'mocha',
-  reporters: ['spec', ['mochawesome', {
+  reporters: [
+  ['mochawesome', {
     outputDir: './reports',
-    reportFilename: 'index',
-    html: true
-  }]],
+    outputFileFormat: function(opts) {
+      return `results-${opts.cid}.json`
+    }
+  }]
+],
   mochaOpts: { timeout: 60000 }
 };
