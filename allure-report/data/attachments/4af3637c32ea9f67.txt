@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": "(//android.view.ViewGroup[@content-desc=\"test-Item\"])[1]/android.view.ViewGroup/android.widget.ImageView"
-}
