@@ -20,22 +20,23 @@ jobs:
     - name: Instalar dependências
       run: npm ci
 
-    - name: Iniciar emulador + rodar testes
+    - name: Iniciar emulador e rodar testes
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
-        api-level: 30
-        arch: x86_64                 # volta pro x86
-        profile: Nexus 5
+        api-level: 30                  # mais leve que 34
+        arch: x86_64                   # OK no macOS
+        profile: Nexus 5               # tela e RAM menores
         target: google_apis
         disable-animations: true
         emulator-options: "-no-window"
+        emulator-boot-timeout: 900     # ⏲️ 15 min de margem
         script: |
-          echo "⌛ Aguardando boot do emulador..."
+          echo "⌛ aguardando boot..."
           adb wait-for-device
           until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
             sleep 5
           done
-          echo "✅ Emulador pronto!"
+          echo "✅ emulador pronto!"
           npm run ci:test
 
     # 5 ▸ Relatório (opcional)
