@@ -2,7 +2,7 @@
  * Rolagem simples para baixo
  * @param {WebdriverIO.Browser} driver
  */
-async function swipeDown(driver) {
+async function swipe(driver) {
   const { height, width } = await driver.getWindowSize();
 
   const startX = width / 2;
@@ -18,4 +18,4 @@ async function swipeDown(driver) {
   await driver.pause(500);     // dá tempo para a animação terminar
 }
 
-module.exports = { swipeDown };
+module.exports = { swipe };
