@@ -2,9 +2,11 @@ name: Testes pós commit
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   mobile-tests:
@@ -15,28 +17,27 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
     steps:
-    - name: Checkout
+    - name: Validação de repositório
       uses: actions/checkout@v4
 
-    - name: Setup Node
+    - name: Configurando Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 18
-        cache: npm
+        node-version: '18'
 
-    - name: Instalar dependências
+    - name: Instalando dependências
       run: npm ci
 
     - name: Ajustar permissão do wdio
       run: chmod +x ./node_modules/.bin/wdio
 
-    - name: Executar testes mobile no BrowserStack
+    - name: Executando testes
       run: npm run test:mobile
 
-    - name: Gerar relatório HTML do Mochawesome
+    - name: Gerando Relatorio
       run: npm run postreport
 
-    - name: Upload do Relatório HTML
+    - name: Upload do relatorio
       uses: actions/upload-artifact@v4
       with:
         name: mochawesome-html-report
