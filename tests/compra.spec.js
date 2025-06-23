@@ -1,4 +1,3 @@
-// tests/compra.spec.js
 const { expect } = require('chai');
 const { remote } = require('webdriverio');
 const { swipe }  = require('../utils/swipe');
@@ -6,11 +5,11 @@ const { login }  = require('../utils/login');
 
 let driver;
 
-describe('Login Swag Labs – compra de mochila', function () {
+describe('Realizar uma compra com sucesso', function () {
   this.timeout(120_000); 
 
   before(async () => {
-      driver = await remote({
+  driver = await remote({
   protocol: 'https',
   hostname: 'hub.browserstack.com',
   port: 443,
@@ -29,27 +28,22 @@ describe('Login Swag Labs – compra de mochila', function () {
 });
     });
 
-  // 2️⃣  Hook AFTER: encerra a sessão
   after(async () => {
     if (driver) await driver.deleteSession();
   });
 
-  // 3️⃣  TESTE
-  it('faz compra de uma mochila', async () => {
+  it('Compra de mochila', async () => {
 
-    // login util RECEBE o driver
     await login(driver);
 
-    // elemento da mochila
     const itemMochila = await driver.$('(//android.view.ViewGroup[@content-desc="test-Item"])[1]/android.view.ViewGroup/android.widget.ImageView');
     await itemMochila.click();
 
-    // botão ADD TO CART
     const botaoAddCarrinho = '//android.widget.TextView[@text="ADD TO CART"]';
 
     let tentativas = 0;
     while (!(await driver.$(botaoAddCarrinho).isDisplayed()) && tentativas < 6) {
-      await swipe(driver);                           // se o util swipe precisar do driver
+      await swipe(driver);
       tentativas++;
     }
 
@@ -58,7 +52,6 @@ describe('Login Swag Labs – compra de mochila', function () {
     }
     await driver.$(botaoAddCarrinho).click();
 
-    // restante do fluxo…
     const botaoCarrinho = await driver.$('//android.view.ViewGroup[@content-desc="test-Cart"]/android.view.ViewGroup/android.widget.ImageView');
     await botaoCarrinho.click();
 
@@ -66,13 +59,11 @@ describe('Login Swag Labs – compra de mochila', function () {
     await botaoCheckout.waitForDisplayed({ timeout: 5000 });
     await botaoCheckout.click();
 
-    // preenche formulário
     await driver.$('~test-First Name').setValue('Vinicios');
     await driver.$('~test-Last Name').setValue('Virissimo');
     await driver.$('~test-Zip/Postal Code').setValue('07713110');
     await driver.$('~test-CONTINUE').click();
 
-    // finaliza compra
     const botaoFinish = '~test-FINISH';
     tentativas = 0;
     while (!(await driver.$(botaoFinish).isDisplayed()) && tentativas < 6) {
@@ -84,9 +75,24 @@ describe('Login Swag Labs – compra de mochila', function () {
     }
     await driver.$(botaoFinish).click();
 
-    // validação
     const thankYou = await driver.$('//android.widget.TextView[@text="THANK YOU FOR YOU ORDER"]');
     await thankYou.waitForDisplayed({ timeout: 5000 });
     expect(await thankYou.getText()).to.equal('THANK YOU FOR YOU ORDER');
+  });
+
+   afterEach(async function () {
+    const safeName = this.currentTest.title.replace(/\s+/g, '_');
+    const filePath = `./reports/mochawesome/screenshots/${safeName}.png`;
+
+    try {
+      await driver.saveScreenshot(filePath);
+      // attach no contexto
+      this.currentTest.context = {
+        title: 'Screenshot',
+        value: filePath
+      };
+    } catch (e) {
+      console.warn('Falha ao capturar screenshot', e);
+    }
   });
 });

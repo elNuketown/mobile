@@ -1,12 +1,11 @@
 const { expect } = require('chai');
-const { remote } = require('webdriverio');           // ← faltava esse import
+const { remote } = require('webdriverio');
 const { login } = require('../utils/login');
 const allure = require('@wdio/allure-reporter').default;
 
 let driver;
 
-describe('Login Swag Labs', () => {
-  // 1️⃣ Hook de setup (antes dos testes)
+describe('Login com sucesso', () => {
   before(async () => {
    driver = await remote({
   protocol: 'https',
@@ -27,12 +26,10 @@ describe('Login Swag Labs', () => {
 });
   });
 
-  // 2️⃣ Hook de teardown (depois dos testes)
   after(async () => {
     if (driver) await driver.deleteSession();
   });
 
-  // 3️⃣ Teste real
   it('faz login com usuário e senha válidos', async () => {
     await login(driver);
 
@@ -41,5 +38,21 @@ describe('Login Swag Labs', () => {
     
     const texto = await itemLoja.getText();
     expect(texto).to.equal('Sauce Labs Backpack');
+  });
+
+   afterEach(async function () {
+    const safeName = this.currentTest.title.replace(/\s+/g, '_');
+    const filePath = `./reports/mochawesome/screenshots/${safeName}.png`;
+
+    try {
+      await driver.saveScreenshot(filePath);
+      // attach no contexto
+      this.currentTest.context = {
+        title: 'Screenshot',
+        value: filePath
+      };
+    } catch (e) {
+      console.warn('Falha ao capturar screenshot', e);
+    }
   });
 });
